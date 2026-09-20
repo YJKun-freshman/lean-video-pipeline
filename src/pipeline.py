@@ -1,14 +1,14 @@
-# 主流程：依序執行 Step1 到 Step4，自動產生所有篩選段落的短影音
+# 主流程：依序執行 Step1 到 Step4（Scene系統版）
 #
 # 執行方式：python pipeline.py
 
 from config import SOURCE_VIDEO_URL
-from cache import extract_video_id, load_json
+from cache import extract_video_id
 from download import download_audio
 from transcribe import transcribe
 from rewrite import rewrite_and_score, select_top_segments
-from tts import generate_tts
-from render import render_video
+from scene_planner import normalize_candidates
+from render import render_segment_video
 
 
 def main():
@@ -25,25 +25,16 @@ def main():
     candidates = rewrite_and_score(video_id, transcript["text"])
     selected = select_top_segments(candidates, video_id)
 
-    print(f"\n--- Step4：生成 {len(selected)} 支短影音 ---")
+    print("\n--- Step3.5：Scene Planner 正規化 ---")
+    selected = normalize_candidates(selected)
+
+    print(f"\n--- Step4：生成 {len(selected)} 支短影音（Scene系統） ---")
     output_paths = []
     for i, segment in enumerate(selected):
         print(f"\n處理第 {i + 1}/{len(selected)} 段：{segment['topic']}")
-
-        audio_seg_path = generate_tts(video_id, i, segment["rewritten_script"])
-
-        chart_data = segment.get("chart_data") or {}
-        if not chart_data:
-            chart_data = {segment["topic"]: 1}
-
-        output_path = render_video(
-            video_id, i,
-            segment["topic"],
-            segment["rewritten_script"],
-            audio_seg_path,
-            chart_data,
-        )
-        output_paths.append(output_path)
+        output_path = render_segment_video(video_id, i, segment)
+        if output_path:
+            output_paths.append(output_path)
 
     print(f"\n=== 全部完成，共產生 {len(output_paths)} 支短影音 ===")
     for p in output_paths:
