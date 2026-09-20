@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+data/cache/*/
+!data/cache/.gitkeep
+data/output/*.mp4
+!data/output/.gitkeep
+*.log
+.DS_Store
+APIKEY.txt
