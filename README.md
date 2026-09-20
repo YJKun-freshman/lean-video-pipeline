@@ -80,7 +80,7 @@ python pipeline.py
 
 ## 專案結構
 
-.
+```
 ├── src/
 │ ├── pipeline.py # 主流程入口，串接 Step1-4
 │ ├── config.py # 讀取 .env 環境變數
@@ -99,7 +99,7 @@ python pipeline.py
 ├── requirements.txt
 ├── README.md
 └── cost.md # 成本假設與決策說明
-
+```
 
 ## 成本說明
 
