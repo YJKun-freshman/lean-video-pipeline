@@ -363,6 +363,13 @@ Image.fromarray(clip.get_frame(4.0)).save("preview.png")   # 取第 4 秒的畫�
 - **Keyword 標示是本地規則**：只涵蓋常見的數字、單位與少數變化詞，不是自然語言理解
 - **Whisper `base` 模型有錯字**：例如「新青安」可能被辨識成其他字，可改用更大的模型
 - **LLM 輸出有隨機性**：同一份逐字稿多次改寫，切出的段落數與 Scene 組合可能不同
+- **實測中曾出現的具體案例**：同一份逐字稿的其中一次改寫，Gemini 針對「新青安助買房隱憂」
+  這個段落產生的兩個 `big_number` Scene 都缺少必要欄位 `value`，被 Scene Planner 正確攔截捨棄，
+  導致該段最終只剩下 `hook` 與 `ending` 兩個 Scene，完全沒有呈現任何具體數字內容。
+  這個案例一方面驗證了 Scene Planner 的防呆機制確實有效攔截了不完整的資料，
+  另一方面也說明 LLM 輸出的隨機性可能導致單一影片內容過於單薄，
+  建議正式使用前應檢視每支影片的實際內容完整度，必要時可刪除 `script_candidates.json`
+  觸發重新生成
 - **`google.generativeai` 套件已被官方標示為 deprecated**：功能目前不受影響，日後建議遷移到新版 `google.genai`
 - **主要在 Windows 驗證**：字型與路徑處理以 Windows 為主，其他系統可能需要調整字型設定
 - **渲染速度**：影片由 CPU 逐幀合成，渲染時間約為影片長度的 2～3 倍（作者機器上的實測值）
