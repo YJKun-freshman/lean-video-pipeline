@@ -194,6 +194,11 @@ python pipeline.py
   程式已在 `transcribe.py` 開頭設定 `HF_HUB_DISABLE_SYMLINKS=1` 處理；仍遇到請確認該行存在
 - 影片渲染是 CPU 運算，會比影片長度慢（見 [cost.md](./cost.md)）
 
+
+### （選用）Windows 快速執行
+
+專案根目錄提供 `run.bat`，雙擊執行會提示輸入 YouTube 網址（直接按 Enter 則沿用
+`.env` 現有設定），自動更新 `.env` 並跑完整流程，適合快速切換不同影片測試。
 ---
 
 ## 設定參數
